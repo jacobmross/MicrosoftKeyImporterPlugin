@@ -24,9 +24,10 @@ namespace MicrosoftKeyImporterPlugin
             var document = new XmlDocument();
             document.Load(sInput);
 
-            var root = document.DocumentElement;
-            var products = root.SelectNodes("Product_Key");
+         
 
+            var root = document.DocumentElement.SelectSingleNode("YourKey");
+            var products = root.SelectNodes("Product_Key");
             if (products == null || products.Count == 0)
                 return;
 
