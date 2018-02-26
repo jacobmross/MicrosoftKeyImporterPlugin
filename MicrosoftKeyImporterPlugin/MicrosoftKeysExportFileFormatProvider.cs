@@ -1,11 +1,5 @@
-﻿using System;
-using System.Text;
-using System.Threading;
-using System.Xml;
+﻿using System.Xml;
 using KeePass.DataExchange;
-using KeePass.Plugins;
-using KeePass.Resources;
-using KeePass.Util;
 using KeePassLib;
 using KeePassLib.Interfaces;
 using KeePassLib.Security;
@@ -14,17 +8,15 @@ namespace MicrosoftKeyImporterPlugin
 {
     class MicrosoftKeysExportFileFormatProvider : FileFormatProvider
     {
-        public override bool SupportsImport { get { return true; }}
+        public override bool SupportsImport { get { return true; } }
         public override bool SupportsExport { get { return false; } }
-        public override string FormatName { get { return "MSDN or TechNet Keys XML"; }}
+        public override string FormatName { get { return "MSDN or TechNet Keys XML"; } }
         public override string DefaultExtension { get { return "xml"; } }
 
         public override void Import(PwDatabase pwStorage, System.IO.Stream sInput, IStatusLogger slLogger)
         {
             var document = new XmlDocument();
             document.Load(sInput);
-
-         
 
             var root = document.DocumentElement.SelectSingleNode("YourKey");
             var products = root.SelectNodes("Product_Key");
@@ -33,10 +25,10 @@ namespace MicrosoftKeyImporterPlugin
 
             var msdnGroup = pwStorage.RootGroup.FindCreateGroup("Microsoft Product Keys", true);
 
-            for (int i = 0; i < products.Count; i++ )
+            for (int i = 0; i < products.Count; i++)
             {
                 var product = new Product(products[i]);
-                slLogger.SetText(string.Format("{0} ({1} of {2})", product.Name, i + 1, products.Count), LogStatusType.Info);
+                slLogger.SetText(string.Format("{0} ({1} of {2})", product.Name, i++, products.Count), LogStatusType.Info);
                 AddProduct(pwStorage, msdnGroup, product);
             }
         }
@@ -47,7 +39,7 @@ namespace MicrosoftKeyImporterPlugin
 
             foreach (var key in product.Keys)
             {
-                if(!GroupContainsKeyAsPassword(productGroup,key))
+                if (!GroupContainsKeyAsPassword(productGroup, key))
                     AddKey(database, productGroup, key);
             }
         }

@@ -13,11 +13,14 @@ namespace MicrosoftKeyImporterPlugin
         }
 
         public String Name { get { return _node.Attributes["Name"].Value.Replace("\n", string.Empty); } }
+        public String KeyRetrievalNote { get { return _node.Attributes["KeyRetrievalNote"].Value; } }
+
 
         public List<Key> Keys
         {
 
-            get {
+            get
+            {
                 return GetKeys();
             }
         }
@@ -29,13 +32,12 @@ namespace MicrosoftKeyImporterPlugin
             foreach (XmlNode key in _node.ChildNodes)
             {
                 keys.Add(new Key
-                             {
-                                 Value = key.InnerText,
-                                 Type = key.Attributes != null ? key.Attributes["Type"].Value : string.Empty,
-                                 Description = key.FirstChild.NodeType == XmlNodeType.CDATA ? key.InnerText : string.Empty
-                             });
+                {
+                    Value = key.InnerText,
+                    Type = key.Attributes != null ? key.Attributes["Type"].Value : string.Empty,
+                    Description = key.FirstChild.NodeType == XmlNodeType.CDATA ? key.InnerText : string.Empty
+                });
             }
-
             return keys;
         }
     }
